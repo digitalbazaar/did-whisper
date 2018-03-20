@@ -2,7 +2,7 @@
   "name": "did-whisper",
   "version": "0.0.0",
   "description": "",
-  "main": "./src/index.js",
+  "main": "./lib/index.js",
   "scripts": {
     "start": "node ./src/index.js",
     "mocha": "mocha ./test",
@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "bs58": "^4.0.1",
+    "did-client": "digitalbazaar/did-client#dz-callable-info",
     "sodium-native": "^2.1.4"
   },
   "devDependencies": {
