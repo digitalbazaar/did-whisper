@@ -1,0 +1,57 @@
+#!/usr/bin/env node
+const yargs = require('yargs');
+const whisper = require('../lib/index');
+
+yargs
+  .usage('$0 <cmd> [args]')
+
+  .help('h')
+
+  .alias('h', 'help')
+
+  .demandCommand(1, 'Please specify a command')
+
+  .command(
+    'encrypt <did> <message>',
+    "encrypt an anonymous message for the recipient's DID",
+    yargs => {
+      yargs
+        .positional('did', {
+          describe: 'DID of recipient',
+          type: 'string'
+        })
+        .positional('message', {
+          describe: 'message to be encrypted',
+          type: 'string'
+        });
+    },
+    argv => {
+      whisper.encryptForDid(argv.did, argv.message)
+        .then(cipher => {
+          console.log(cipher.toString('hex'));
+        });
+    }
+  )
+  .command(
+    'decrypt <did> <message>',
+    'decrypt a message intended for the DID',
+    yargs => {
+      yargs
+        .positional('did', {
+          describe: 'DID of recipient',
+          type: 'string'
+        })
+        .positional('message', {
+          describe: 'cipher message to be decrypted',
+          type: 'string'
+        });
+    },
+    argv => {
+      whisper.decryptForDid(argv.did, Buffer.from(argv.message, 'hex'))
+        .then(message => {
+          console.log(message.toString());
+        });
+    }
+  );
+
+yargs.argv;
