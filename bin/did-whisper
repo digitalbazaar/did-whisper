@@ -35,6 +35,7 @@ yargs
         });
     }
   )
+
   .command(
     'decrypt <did> [message]',
     'decrypt a message intended for the DID',
