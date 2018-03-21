@@ -1,7 +1,7 @@
 {
   "name": "did-whisper",
   "version": "0.0.0",
-  "description": "",
+  "description": "A demo encrypted pastebin client using Veres One DID Documents",
   "main": "./lib/index.js",
   "scripts": {
     "start": "node ./src/index.js",
@@ -28,6 +28,7 @@
   "dependencies": {
     "bs58": "^4.0.1",
     "did-client": "digitalbazaar/did-client#dz-callable-info",
+    "get-stdin": "^6.0.0",
     "sodium-native": "^2.1.4",
     "yargs": "^11.0.0"
   },
