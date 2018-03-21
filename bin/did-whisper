@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const yargs = require('yargs');
+const getStdin = require('get-stdin');
 const whisper = require('../lib/index');
 
 yargs
@@ -12,7 +13,7 @@ yargs
   .demandCommand(1, 'Please specify a command')
 
   .command(
-    'encrypt <did> <message>',
+    'encrypt <did> [message]',
     "encrypt an anonymous message for the recipient's DID",
     yargs => {
       yargs
@@ -26,14 +27,16 @@ yargs
         });
     },
     argv => {
-      whisper.encryptForDid(argv.did, argv.message)
+      Promise.resolve()
+        .then(() => argv.message || getStdin())
+        .then(message => whisper.encryptForDid(argv.did, message))
         .then(cipher => {
           console.log(cipher.toString('hex'));
         });
     }
   )
   .command(
-    'decrypt <did> <message>',
+    'decrypt <did> [message]',
     'decrypt a message intended for the DID',
     yargs => {
       yargs
@@ -43,11 +46,14 @@ yargs
         })
         .positional('message', {
           describe: 'cipher message to be decrypted',
-          type: 'string'
+          type: 'string',
+          optional: true
         });
     },
     argv => {
-      whisper.decryptForDid(argv.did, Buffer.from(argv.message, 'hex'))
+      Promise.resolve()
+        .then(() => argv.message || getStdin())
+        .then(cipher => whisper.decryptForDid(argv.did, Buffer.from(cipher, 'hex')))
         .then(message => {
           console.log(message.toString());
         });
