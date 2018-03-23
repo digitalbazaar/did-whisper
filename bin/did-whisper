@@ -3,6 +3,9 @@ const yargs = require('yargs');
 const getStdin = require('get-stdin');
 const whisper = require('../lib/index');
 
+const DEFAULT_EXPIRATION = 604800; // 1 week, in seconds
+const DEFAULT_URL = 'http://localhost:5000/whisper';
+
 yargs
   .usage('$0 <cmd> [args]')
 
@@ -29,10 +32,11 @@ yargs
     argv => {
       Promise.resolve()
         .then(() => argv.message || getStdin())
-        .then(message => whisper.encryptForDid(argv.did, message))
-        .then(cipher => {
-          console.log(cipher.toString('hex'));
-        });
+        .then(message => whisper.encryptForDid(argv.did, message,
+          DEFAULT_EXPIRATION))
+        .then(encrypted => whisper.saveMessage(encrypted, DEFAULT_URL))
+        .then(console.log) // display the resulting tiny url
+        .catch(console.error);
     }
   )
 
@@ -57,7 +61,8 @@ yargs
         .then(cipher => whisper.decryptForDid(argv.did, Buffer.from(cipher, 'hex')))
         .then(message => {
           console.log(message.toString());
-        });
+        })
+        .catch(console.error);
     }
   );
 
