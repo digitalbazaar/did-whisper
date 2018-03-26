@@ -36,23 +36,45 @@ npm link
 
 ### Encrypting messages
 
+To encrypt a message (and receive a link to where it's stored):
+
 ```bash
-did-whisper encrypt <did> [message]
+did-whisper encrypt <did> [message] [options]
 ```
 
 The message can be included inline, or redirected from stdin. For example:
 
 ```bash
-did-whisper encrypt did:v1:test:nym:2pfPix2tcwa7gNoMRxdcHbEyFGqaVBPNntCsDZexVeHX < message.txt > cipher.txt
+$ did-whisper encrypt did:v1:test:nym:2pfPix2tcwa7gNoMRxdcHbEyFGqaVBPNntCsDZexVeHX < message.txt
+http://localhost:5000/whisper/HkVxJRL5M
 ```
 
-Would encrypt the contents of the file `message.txt` and save them in the file
-`cipher.txt`.
+would encrypt the contents of the file `message.txt`.
+
+The `did-whisper` client automatically saves the encrypted message to a
+`did-whisper-store` service (unless it cannot be reached, or the `-n` option
+is passed in.
+
+#### Encrypting Options
+
+- `-e, --exp` - Expire message in this time period (valid options:
+  `5m`, `1h`, `1d`, `1w`). Default: `1w`.
+- `-s, --store` - URL of the `did-whisper-store` service to save messages to.
+  Default: `http://localhost:5000`.
+- `-n, --no-store` - Do not save the message, just output the encrypted text
+  to stdout.
 
 ### Decrypting messages
 
-Note: the recipient's DID must be a locally stored DID (the client uses
-the private key stored in the DID Document).
+If you just have the message URL:
+
+```bash
+did-whisper decrypt <saved message url>
+```
+
+If you have the raw encrypted message and know the recipient DID (it must be a
+locally stored DID, since the client uses the private key stored in the DID
+Document):
 
 ```bash
 did-whisper decrypt <did> [message]
@@ -66,7 +88,8 @@ See [the contribute file](https://github.com/digitalbazaar/bedrock/blob/master/C
 
 PRs accepted.
 
-Small note: If editing the Readme, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
+Small note: If editing the Readme, please conform to the
+[standard-readme](https://github.com/RichardLitt/standard-readme) specification.
 
 ## License
 
