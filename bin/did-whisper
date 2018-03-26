@@ -3,7 +3,7 @@ const yargs = require('yargs');
 const getStdin = require('get-stdin');
 const whisper = require('../lib/index');
 
-const DEFAULT_EXPIRATION = 604800; // 1 week, in seconds
+// const DEFAULT_EXPIRATION = 604800; // 1 week, in seconds
 const DEFAULT_URL = 'http://localhost:5000/whisper';
 
 yargs
@@ -15,8 +15,16 @@ yargs
 
   .demandCommand(1, 'Please specify a command')
 
+  .option('e', {
+    alias: 'expiration',
+    type: 'string',
+    describe: 'expire encrypted message in',
+    choices: ['5m', '1h', '1d', '1w'],
+    default: '1w'
+  })
+
   .command(
-    'encrypt <did> [message]',
+    'encrypt <did> [message] [options]',
     "encrypt an anonymous message for the recipient's DID",
     yargs => {
       yargs
@@ -33,7 +41,7 @@ yargs
       Promise.resolve()
         .then(() => argv.message || getStdin())
         .then(message => whisper.encryptForDid(argv.did, message,
-          DEFAULT_EXPIRATION))
+          argv.expiration))
         .then(encrypted => whisper.saveMessage(encrypted, DEFAULT_URL))
         .then(console.log) // display the resulting tiny url
         .catch(console.error);
@@ -41,7 +49,7 @@ yargs
   )
 
   .command(
-    'decrypt <did> [message]',
+    'decrypt <did> [message] [options]',
     'decrypt a message intended for the DID',
     yargs => {
       yargs
