@@ -4,7 +4,7 @@ const getStdin = require('get-stdin');
 const whisper = require('../lib/index');
 
 // const DEFAULT_EXPIRATION = 604800; // 1 week, in seconds
-const DEFAULT_URL = 'http://localhost:5000/whisper';
+const DEFAULT_URL = 'http://localhost:5000';
 
 yargs
   .usage('$0 <cmd> [args]')
@@ -23,9 +23,23 @@ yargs
     default: '1w'
   })
 
+  .option('s', {
+    alias: 'store',
+    type: 'string',
+    describe: 'url or server running a did-whisper-store service',
+    default: DEFAULT_URL
+  })
+
+  .option('n', {
+    alias: 'no-store',
+    type: 'boolean',
+    describe: 'do not store encrypted message, output to stdout instead',
+    default: false
+  })
+
   .command(
     'encrypt <did> [message] [options]',
-    "encrypt an anonymous message for the recipient's DID",
+    "encrypt an anonymous message for the recipient's DID and save it to a whisper store",
     yargs => {
       yargs
         .positional('did', {
@@ -40,25 +54,33 @@ yargs
     argv => {
       Promise.resolve()
         .then(() => argv.message || getStdin())
+
         .then(message => whisper.encryptForDid(argv.did, message,
           argv.expiration))
-        .then(encrypted => whisper.saveMessage(encrypted, DEFAULT_URL))
-        .then(console.log) // display the resulting tiny url
+
+        .then(encrypted => {
+          return argv['no-store']
+            ? encrypted.cipher
+            : whisper.saveMessage(encrypted, argv.store);
+        })
+
+        .then(console.log) // display the resulting tiny url or cipher text
+
         .catch(console.error);
     }
   )
 
   .command(
-    'decrypt <did> [message] [options]',
+    'decrypt <url> [message]',
     'decrypt a message intended for the DID',
     yargs => {
       yargs
-        .positional('did', {
-          describe: 'DID of recipient',
+        .positional('url', {
+          describe: 'saved message URL, or DID of recipient',
           type: 'string'
         })
         .positional('message', {
-          describe: 'cipher message to be decrypted',
+          describe: 'optional raw ciphertext of message to be decrypted',
           type: 'string',
           optional: true
         });
@@ -66,10 +88,13 @@ yargs
     argv => {
       Promise.resolve()
         .then(() => argv.message || getStdin())
-        .then(cipher => whisper.decryptForDid(argv.did, Buffer.from(cipher, 'hex')))
+
+        .then(cipher => whisper.decrypt(argv.url, cipher))
+
         .then(message => {
           console.log(message.toString());
         })
+
         .catch(console.error);
     }
   );
