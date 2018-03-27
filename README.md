@@ -1,7 +1,5 @@
 # DID Whisper Client _(did-whisper)_
 
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-
 > A demo encrypted pastebin client using Veres One DID Documents
 
 ## Table of Contents
@@ -34,6 +32,14 @@ npm link
 
 ## Usage
 
+The client is designed to work with a
+[`did-whisper-server`](https://github.com/digitalbazaar/did-whisper-server)
+instance running somewhere, either locally on your machine or on some server.
+
+If you're offline or prefer not to use a server to store the encrypted messages
+(so you can pass along just their URLs), you can encrypt and decrypt raw text
+directly (using the `-n` flag to encrypt).
+
 ### Encrypting messages
 
 To encrypt a message (and receive a link to where it's stored):
@@ -52,17 +58,21 @@ http://localhost:5000/whisper/HkVxJRL5M
 would encrypt the contents of the file `message.txt`.
 
 The `did-whisper` client automatically saves the encrypted message to a
-`did-whisper-store` service (unless it cannot be reached, or the `-n` option
+`did-whisper-server` service (unless it cannot be reached, or the `-n` option
 is passed in.
 
 #### Encrypting Options
 
 - `-e, --exp` - Expire message in this time period (valid options:
-  `5m`, `1h`, `1d`, `1w`). Default: `1w`.
-- `-s, --store` - URL of the `did-whisper-store` service to save messages to.
+  `5m`, `1h`, `1d`, `1w`).
+  Default: `1w`.
+- `-s, --store` - URL of the
+  [`did-whisper-server`](https://github.com/digitalbazaar/did-whisper-server)
+  to save messages to.
   Default: `http://localhost:5000`.
 - `-n, --no-store` - Do not save the message, just output the encrypted text
   to stdout.
+  Default: `false`.
 
 ### Decrypting messages
 

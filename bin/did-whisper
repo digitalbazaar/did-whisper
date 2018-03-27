@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 const yargs = require('yargs');
 const getStdin = require('get-stdin');
+
 const whisper = require('../lib/index');
 
-// const DEFAULT_EXPIRATION = 604800; // 1 week, in seconds
 const DEFAULT_URL = 'http://localhost:5000';
 
 yargs
@@ -26,7 +26,7 @@ yargs
   .option('s', {
     alias: 'store',
     type: 'string',
-    describe: 'url or server running a did-whisper-store service',
+    describe: 'url or server running a did-whisper-server instance',
     default: DEFAULT_URL
   })
 
