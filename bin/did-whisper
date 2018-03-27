@@ -99,4 +99,6 @@ yargs
     }
   );
 
+process.on('unhandledRejection', console.error);
+
 yargs.argv;
