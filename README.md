@@ -69,7 +69,7 @@ is passed in.
 - `-s, --store` - URL of the
   [`did-whisper-server`](https://github.com/digitalbazaar/did-whisper-server)
   to save messages to.
-  Default: `http://localhost:5000`.
+  Default: `https://whisper.demo.veres.one`.
 - `-n, --no-store` - Do not save the message, just output the encrypted text
   to stdout.
   Default: `false`.
