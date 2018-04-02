@@ -4,7 +4,6 @@
   "description": "A demo encrypted pastebin client using Veres One DID Documents",
   "main": "./lib/index.js",
   "scripts": {
-    "start": "node ./src/index.js",
     "mocha": "mocha ./test",
     "test": "npm run mocha",
     "preversion": "npm test",
