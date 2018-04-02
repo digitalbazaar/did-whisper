@@ -4,7 +4,7 @@ const getStdin = require('get-stdin');
 
 const whisper = require('../lib/index');
 
-const DEFAULT_URL = 'http://localhost:5000';
+const DEFAULT_SERVER_URL = 'https://whisper.demo.veres.one';
 
 yargs
   .usage('$0 <cmd> [args]')
@@ -27,7 +27,7 @@ yargs
     alias: 'store',
     type: 'string',
     describe: 'url or server running a did-whisper-server instance',
-    default: DEFAULT_URL
+    default: DEFAULT_SERVER_URL
   })
 
   .option('n', {
