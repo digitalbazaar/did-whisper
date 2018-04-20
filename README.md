@@ -103,4 +103,4 @@ Small note: If editing the Readme, please conform to the
 
 ## License
 
-TBD
+[New BSD License (3-clause)](LICENSE)
