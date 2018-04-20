@@ -25,7 +25,6 @@ Requires Node.js 8.6+.
 ```
 git clone https://github.com/digitalbazaar/did-whisper.git
 cd did-whisper
-git checkout first-pass
 npm install
 npm link
 ```

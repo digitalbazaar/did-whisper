@@ -55,8 +55,8 @@ yargs
       Promise.resolve()
         .then(() => argv.message || getStdin())
 
-        .then(message => whisper.encryptForDid(argv.did, message,
-          argv.expiration))
+        .then(message => whisper.encryptForDid({message, did: argv.did,
+          expiration: argv.expiration}))
 
         .then(encrypted => {
           return argv['no-store']
