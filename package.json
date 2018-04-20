@@ -13,7 +13,7 @@
     "did-whisper": "bin/did-whisper"
   },
   "engines": {
-    "node": ">=8.0"
+    "node": ">=8.6"
   },
   "repository": {
     "type": "git",
